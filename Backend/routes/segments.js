@@ -50,6 +50,17 @@ router.post('/', async (req, res) => {
 
         const audienceSize = parseInt(audienceResult.rows[0].count, 10);
 
+        // Query to fetch matching customer details
+        const customerQuery = `
+            SELECT id, name, email, total_spent AS totalAmount
+            FROM customers
+            WHERE ${whereClause}
+        `;
+        const customerResult = await pool.query(customerQuery);
+
+        // Log the matching customers for debugging
+        console.log('Matching Customers:', customerResult.rows);
+
         // Insert query to save the segment
         const insertQuery = `
             INSERT INTO segments (user_id, name, rules, audience_size)
@@ -68,8 +79,14 @@ router.post('/', async (req, res) => {
         // Execute the insert query
         const result = await pool.query(insertQuery, [user_id, name, JSON.stringify(rules), audienceSize]);
 
-        // Return the created segment
-        return res.status(201).json({ segment: result.rows[0] });
+        // Return the created segment along with customer details
+        return res.status(201).json({
+            segment: {
+                ...result.rows[0],
+                rules,
+                customers: customerResult.rows // Include matching customer details
+            }
+        });
 
     } catch (err) {
         console.error('Error creating segment:', err);

@@ -12,7 +12,7 @@ app.use(express.json());
 // DELIVERY WORKER LOGIC
 
 const DELIVERY_BATCH_INTERVAL = 5000; // 5 seconds
-const RECEIPT_ENDPOINT = 'http://localhost:5000/api/receipt';
+const RECEIPT_ENDPOINT = 'https://customer-relationship-management-pi.vercel.app/api/receipt';
 
 const simulateDelivery = () => {
     return Math.random() < 0.9 ? 'SENT' : 'FAILED';
