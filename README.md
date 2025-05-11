@@ -1,22 +1,18 @@
-Here's your **fully generated `README.md`** for the [Xeno-CRM GitHub repository](https://github.com/Pranjalbajpai3030/Xeno-Crm), using the complete project info, structure, and professional standards.
 
----
-
-```markdown
-# 🚀 Xeno-CRM – AI-Powered Customer Relationship Management Platform
+ 🚀 Xeno-CRM – AI-Powered Customer Relationship Management Platform
 
 Xeno-CRM is a full-stack mini CRM system that empowers marketers and businesses to create dynamic audience segments, deliver personalized campaigns, and intelligently track delivery results using AI enhancements. Built with modern technologies, this system simulates real-world CRM behavior and integrates machine intelligence to make campaign management smarter and faster.
 
 ---
 
-## 🌐 Live Demo
+ 🌐 Live Demo
 
 - 🔗 **Frontend**: [Live Website](https://customer-relationship-management-three.vercel.app/login)
 - 🎥 **Demo Video**: [Watch on YouTube](https://your-demo-link)
 
 ---
 
-## 🧩 Features
+ 🧩 Features
 
 - ✅ Google OAuth 2.0 Authentication
 - ✅ Customer and Order Data Ingestion via APIs
@@ -32,7 +28,7 @@ Xeno-CRM is a full-stack mini CRM system that empowers marketers and businesses 
 
 ---
 
-## 🧠 AI Features
+ 🧠 AI Features
 
 | Feature                                | Description                                                                 |
 |----------------------------------------|-----------------------------------------------------------------------------|
@@ -42,9 +38,9 @@ Xeno-CRM is a full-stack mini CRM system that empowers marketers and businesses 
 
 ---
 
-## 🛠 Tech Stack
+ 🛠 Tech Stack
 
-### 💻 Frontend
+ 💻 Frontend
 - React.js
 - TypeScript
 - Tailwind CSS
@@ -52,25 +48,25 @@ Xeno-CRM is a full-stack mini CRM system that empowers marketers and businesses 
 - Vite.js
 - Framer Motion (for transitions)
 
-### 🔧 Backend
+ 🔧 Backend
 - Node.js
 - Express.js
 - MongoDB
 - RESTful APIs
 
-### 🔐 Authentication
+ 🔐 Authentication
 - Google OAuth 2.0
 
-### 🤖 AI & NLP
+ 🤖 AI & NLP
 - OpenAI GPT APIs (Gemini optional)
 
-### 📦 Deployment
+ 📦 Deployment
 - **Frontend**: Vercel  
 - **Backend**: Render / Vercel Functions
 
 ---
 
-## 📁 Folder Structure
+ 📁 Folder Structure
 
 ```
 
@@ -103,15 +99,15 @@ Customer-Relationship-Management/
 
 ---
 
-## 📥 Setup Instructions
+ 📥 Setup Instructions
 
-### 🚀 Clone the Repo
+ 🚀 Clone the Repo
 ```bash
 git clone https://github.com/Pranjalbajpai3030/Xeno-Crm.git
 cd Xeno-Crm
 ````
 
-### 🔧 Backend Setup
+ 🔧 Backend Setup
 
 ```bash
 cd Backend
@@ -127,7 +123,7 @@ GOOGLE_CLIENT_ID=your_google_client_id
 JWT_SECRET=your_jwt_secret
 ```
 
-### 💻 Frontend Setup
+ 💻 Frontend Setup
 
 ```bash
 cd ../Frontend
@@ -144,25 +140,15 @@ VITE_BACKEND_URL=http://localhost:5000
 
 ---
 
-## 🖼️ Architecture Diagram
+ 🖼️ Architecture Diagram
 
 > 📌 *Coming soon – or add `docs/architecture.png` here*
 
-Simple Flow:
-
-```
-[Frontend UI] 
-   ⇅ 
-[Auth + Rule Builder + Campaign Pages] 
-   ⇅ 
-[Backend APIs (Express)] 
-   ⇅ 
-[MongoDB + Communication Log] 
 ```
 
 ---
 
-## 📊 API Endpoints
+ 📊 API Endpoints
 
 | Method | Endpoint                  | Description                       |
 | ------ | ------------------------- | --------------------------------- |
@@ -178,7 +164,7 @@ Simple Flow:
 
 ---
 
-## ⚠️ Known Limitations
+⚠️ Known Limitations
 
 * Simulated delivery (no real SMS/email integration)
 * AI model requires stable API key & rate-limited
@@ -187,7 +173,7 @@ Simple Flow:
 
 ---
 
-## 🙋 Author
+ 🙋 Author
 
 **👨‍💻 Pranjal Bajpai**
 📧 [pb6523@srmist.edu.in](mailto:pb6523@srmist.edu.in)
@@ -196,7 +182,7 @@ Simple Flow:
 ---
 
 
-## ⭐️ Feedback
+ ⭐️ Feedback
 
 If you find this project useful, please consider giving it a ⭐️ on GitHub!
 
