@@ -43,6 +43,9 @@ const SegmentBuilderPage: React.FC = () => {
   ]);
   const [condition, setCondition] = useState<"AND" | "OR">("AND");
   const [audienceSize, setAudienceSize] = useState<number | null>(null);
+  const [aiGeneratedRules, setAIGeneratedRules] = useState<any | null>(null);
+  const [showAIModal, setShowAIModal] = useState(false);
+
   const manualForm = useForm<ManualSegmentForm>();
   const aiForm = useForm<{ segmentName: string; prompt: string }>();
 
@@ -104,25 +107,73 @@ const SegmentBuilderPage: React.FC = () => {
     }
   });
 
-  const handleAISubmit = aiForm.handleSubmit((data) => {
-    // In a real app, this would call the API endpoint
+  const handleAISubmit = aiForm.handleSubmit(async (data) => {
+    const userId = "1";
     const aiPayload = {
-      userId: "user123", // Would come from auth context in real app
-      segmentName: data.segmentName,
+      user_id: parseInt(userId, 10),
+      segment_name: data.segmentName,
       prompt: data.prompt,
     };
 
-    console.log("Submitting AI segment:", aiPayload);
+    try {
+      toast.loading("Generating rules with AI...");
+      const response = await axios.post(
+        "https://customer-relationship-management-pi.vercel.app/api/segments/generate-rule",
+        aiPayload
+      );
 
-    // Mock API call
-    toast.loading("Generating segment with AI...", { duration: 2500 });
+      const generatedRules = response.data;
+      if (!generatedRules || !generatedRules.rules) {
+        toast.dismiss();
+        toast.error("Invalid prompt. Please try a new one.");
+        return;
+      }
 
-    // Simulate successful API response
-    setTimeout(() => {
-      toast.success("AI segment created successfully!");
-      navigate("/preview-audience");
-    }, 2500);
+      setAIGeneratedRules(generatedRules);
+      setShowAIModal(true);
+      toast.dismiss();
+    } catch (error) {
+      console.error("Error generating rules with AI:", error);
+      toast.dismiss();
+      toast.error("Failed to generate rules. Please try again.");
+    }
   });
+
+  const handleAIModalConfirm = async () => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      toast.error("User ID not found. Please log in again.");
+      return;
+    }
+    const segmentPayload = {
+      user_id: parseInt(userId, 10),
+      name: aiGeneratedRules.name,
+      rules: aiGeneratedRules.rules,
+    };
+
+    try {
+      toast.loading("Creating segment...");
+      const response = await axios.post(
+        "https://customer-relationship-management-pi.vercel.app/api/segments/",
+        segmentPayload
+      );
+
+      const { audience_size, customers } = response.data.segment;
+      const segmentId = response.data.segment.id;
+      localStorage.setItem("segmentCustomers", JSON.stringify(customers));
+      localStorage.setItem("segmentId", segmentId);
+      localStorage.setItem("segmentName", response.data.segment.name);
+      setAudienceSize(audience_size);
+      setShowAIModal(false);
+      toast.dismiss();
+      toast.success("Segment created successfully!");
+      navigate("/preview-audience");
+    } catch (error) {
+      console.error("Error creating segment:", error);
+      toast.dismiss();
+      toast.error("Failed to create segment. Please try again.");
+    }
+  };
 
   return (
     <div className="page-container max-w-3xl mx-auto">
@@ -341,8 +392,39 @@ const SegmentBuilderPage: React.FC = () => {
               Preview Audience <ChevronRight className="h-4 w-4" />
             </Button>
           )}
+          {activeTab === "ai" && (
+            <Button onClick={handleAISubmit} className="gap-1">
+              Generate Rules <ChevronRight className="h-4 w-4" />
+            </Button>
+          )}
         </CardFooter>
       </Card>
+
+      {showAIModal && aiGeneratedRules && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-md shadow-lg text-center">
+            <h2 className="text-xl font-bold mb-4">Generated Rules</h2>
+            <p className="text-gray-700">
+              AI has generated the following rules for your segment:
+            </p>
+            <pre className="bg-gray-100 p-4 rounded-md text-left text-sm mt-4">
+              {JSON.stringify(aiGeneratedRules.rules, null, 2)}
+            </pre>
+            <div className="flex justify-center gap-4 mt-6">
+              <Button
+                variant="outline"
+                onClick={() => setShowAIModal(false)}
+                className="gap-1"
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleAIModalConfirm} className="gap-1">
+                Confirm and Save <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {audienceSize !== null && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -368,4 +450,3 @@ const SegmentBuilderPage: React.FC = () => {
 };
 
 export default SegmentBuilderPage;
-// Note: The AI Generator tab is not implemented in this code snippet.

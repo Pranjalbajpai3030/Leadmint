@@ -37,6 +37,7 @@ const CreateCampaignPage: React.FC = () => {
   const [customersTargeted, setCustomersTargeted] = useState<number | null>(
     null
   );
+  const [showAIModal, setShowAIModal] = useState(false);
 
   const manualForm = useForm<ManualCampaignForm>();
   const aiForm = useForm<AICampaignForm>();
@@ -74,47 +75,73 @@ const CreateCampaignPage: React.FC = () => {
     }
   });
 
-  const generateMessage = (prompt: string) => {
-    setIsGeneratingMessage(true);
+  const handleAISubmit = aiForm.handleSubmit(async (data) => {
+    const segmentId = localStorage.getItem("segmentId"); // Retrieve segment ID from localStorage
+    if (!segmentId) {
+      toast.error("Segment ID not found. Please go back and select a segment.");
+      return;
+    }
 
-    // Mock AI generation
-    setTimeout(() => {
-      const mockGeneratedMessage =
-        `Dear Valued Customer,\n\n` +
-        `Thank you for your continued loyalty and support. We're reaching out to express our appreciation ` +
-        `for being one of our high-spending customers.\n\n` +
-        `As a token of our gratitude, we're pleased to offer you exclusive early access to our upcoming ` +
-        `product line, along with a special 15% discount on your next purchase.\n\n` +
-        `We value your business and look forward to continuing to serve you.\n\n` +
-        `Warm regards,\n` +
-        `The Xeno Team`;
-
-      setGeneratedMessage(mockGeneratedMessage);
-      aiForm.setValue("generatedMessage", mockGeneratedMessage);
-      setIsGeneratingMessage(false);
-    }, 2500);
-  };
-
-  const handleAISubmit = aiForm.handleSubmit((data) => {
-    // In a real app, this would call the API endpoint
     const aiPayload = {
-      userId: "user123", // Would come from auth context in real app
-      segmentId: "segment-123", // Would come from previous page context
-      campaignName: data.campaignName,
-      message: data.generatedMessage || generatedMessage,
+      segment_id: parseInt(segmentId, 10),
+      prompt: data.prompt,
     };
 
-    console.log("Submitting AI campaign:", aiPayload);
+    try {
+      toast.loading("Generating message...");
+      const response = await axios.post(
+        "https://customer-relationship-management-pi.vercel.app/api/campaigns/generate-message",
+        aiPayload
+      );
 
-    // Mock API call
-    toast.loading("Creating campaign...", { duration: 1500 });
+      const { message } = response.data;
 
-    // Simulate successful API response
-    setTimeout(() => {
+      if (!message) {
+        toast.dismiss();
+        toast.error("Failed to generate a valid message. Please try again.");
+        return;
+      }
+
+      setGeneratedMessage(message);
+      setShowAIModal(true);
+      toast.dismiss();
+    } catch (error) {
+      console.error("Error generating message:", error);
+      toast.dismiss();
+      toast.error("Failed to generate message. Please try again.");
+    }
+  });
+
+  const handleAIModalConfirm = async () => {
+    const segmentId = localStorage.getItem("segmentId"); // Retrieve segment ID from localStorage
+    if (!segmentId) {
+      toast.error("Segment ID not found. Please go back and select a segment.");
+      return;
+    }
+
+    const campaignPayload = {
+      segment_id: parseInt(segmentId, 10),
+      message: generatedMessage,
+    };
+
+    try {
+      toast.loading("Creating campaign...");
+      const response = await axios.post(
+        "https://customer-relationship-management-pi.vercel.app/api/campaigns",
+        campaignPayload
+      );
+
+      const { customers_targeted } = response.data;
+
+      toast.dismiss();
       toast.success("Campaign created successfully!");
       navigate("/campaign-history");
-    }, 1500);
-  });
+    } catch (error) {
+      console.error("Error creating campaign:", error);
+      toast.dismiss();
+      toast.error("Failed to create campaign. Please try again.");
+    }
+  };
 
   return (
     <div className="page-container max-w-3xl mx-auto">
@@ -208,24 +235,6 @@ const CreateCampaignPage: React.FC = () => {
             <TabsContent value="ai" className="mt-6">
               <form onSubmit={handleAISubmit} className="space-y-6">
                 <div className="form-group">
-                  <label htmlFor="aiCampaignName" className="input-label">
-                    Campaign Name
-                  </label>
-                  <Input
-                    id="aiCampaignName"
-                    placeholder="High Value Customer Appreciation"
-                    {...aiForm.register("campaignName", {
-                      required: "Campaign name is required",
-                    })}
-                  />
-                  {aiForm.formState.errors.campaignName && (
-                    <span className="text-red-500 text-sm">
-                      {aiForm.formState.errors.campaignName.message}
-                    </span>
-                  )}
-                </div>
-
-                <div className="form-group">
                   <label htmlFor="prompt" className="input-label">
                     Describe what kind of message you want
                   </label>
@@ -244,7 +253,7 @@ const CreateCampaignPage: React.FC = () => {
                       variant="outline"
                       className="mt-0"
                       disabled={isGeneratingMessage || !aiForm.watch("prompt")}
-                      onClick={() => generateMessage(aiForm.watch("prompt"))}
+                      onClick={() => handleAISubmit()}
                     >
                       <Sparkles className="h-4 w-4 mr-1" />
                       {isGeneratingMessage ? "Generating..." : "Generate"}
@@ -255,42 +264,6 @@ const CreateCampaignPage: React.FC = () => {
                       {aiForm.formState.errors.prompt.message}
                     </span>
                   )}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="generatedMessage" className="input-label">
-                    Generated Message
-                  </label>
-                  <div
-                    className={`border rounded-md p-4 bg-gray-50 min-h-[12rem] whitespace-pre-line ${
-                      !generatedMessage
-                        ? "flex items-center justify-center text-gray-400"
-                        : ""
-                    }`}
-                  >
-                    {isGeneratingMessage ? (
-                      <div className="flex items-center justify-center h-full">
-                        <div className="animate-pulse flex flex-col items-center">
-                          <Sparkles className="h-6 w-6 mb-2" />
-                          <div>Generating message...</div>
-                        </div>
-                      </div>
-                    ) : generatedMessage ? (
-                      <Textarea
-                        id="generatedMessage"
-                        value={generatedMessage}
-                        onChange={(e) => setGeneratedMessage(e.target.value)}
-                        rows={10}
-                        className="border-0 p-0 bg-transparent resize-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                        {...aiForm.register("generatedMessage")}
-                      />
-                    ) : (
-                      <div className="text-center">
-                        <Sparkles className="h-6 w-6 mx-auto mb-2" />
-                        <div>Your AI-generated message will appear here</div>
-                      </div>
-                    )}
-                  </div>
                 </div>
               </form>
             </TabsContent>
@@ -317,13 +290,34 @@ const CreateCampaignPage: React.FC = () => {
             <Button
               onClick={handleAISubmit}
               className="gap-1"
-              disabled={!generatedMessage}
+              disabled={!aiForm.watch("prompt")}
             >
-              <Send className="h-4 w-4" /> Send Campaign
+              <Send className="h-4 w-4" /> Generate Campaign
             </Button>
           )}
         </CardFooter>
       </Card>
+
+      {showAIModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-md shadow-lg text-center">
+            <h2 className="text-xl font-bold mb-4">Generated Message</h2>
+            <p className="text-gray-700">{generatedMessage}</p>
+            <div className="flex justify-center gap-4 mt-6">
+              <Button
+                variant="outline"
+                onClick={() => setShowAIModal(false)}
+                className="gap-1"
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleAIModalConfirm} className="gap-1">
+                Confirm and Send <Send className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {customersTargeted !== null && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

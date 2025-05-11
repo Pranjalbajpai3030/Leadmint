@@ -1,11 +1,10 @@
-
-import React, { useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  UserPlus, 
-  ShoppingCart, 
-  Layers, 
+import React, { useState } from "react";
+import { NavLink, Link } from "react-router-dom";
+import {
+  LayoutDashboard,
+  UserPlus,
+  ShoppingCart,
+  Layers,
   History,
   Search,
   User,
@@ -13,9 +12,9 @@ import {
   LogOut,
   Menu,
   X,
-  ArrowRight
-} from 'lucide-react';
-import { 
+  ArrowRight,
+} from "lucide-react";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -29,21 +28,41 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
-  SheetClose
+  SheetClose,
 } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
-import XenoLogo from './XenoLogo';
+import XenoLogo from "./XenoLogo";
 
 const Navigation: React.FC = () => {
   const isMobile = useIsMobile();
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-  
+
   const navLinks = [
-    { name: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard className="h-5 w-5" /> },
-    { name: 'Add Customers', path: '/add-customers', icon: <UserPlus className="h-5 w-5" /> },
-    { name: 'Add Orders', path: '/add-orders', icon: <ShoppingCart className="h-5 w-5" /> },
-    { name: 'Segment Builder', path: '/segment-builder', icon: <Layers className="h-5 w-5" /> },
-    { name: 'Campaign History', path: '/campaign-history', icon: <History className="h-5 w-5" /> },
+    {
+      name: "Dashboard",
+      path: "/dashboard",
+      icon: <LayoutDashboard className="h-5 w-5" />,
+    },
+    {
+      name: "Add Customers",
+      path: "/add-customers",
+      icon: <UserPlus className="h-5 w-5" />,
+    },
+    {
+      name: "Add Orders",
+      path: "/add-orders",
+      icon: <ShoppingCart className="h-5 w-5" />,
+    },
+    {
+      name: "Segment Builder",
+      path: "/segment-builder",
+      icon: <Layers className="h-5 w-5" />,
+    },
+    {
+      name: "Campaign History",
+      path: "/campaign-history",
+      icon: <History className="h-5 w-5" />,
+    },
   ];
 
   const NavItems = () => (
@@ -55,8 +74,8 @@ const Navigation: React.FC = () => {
           className={({ isActive }) =>
             `px-3 py-2 rounded-md flex items-center gap-2 transition-colors ${
               isActive
-                ? 'bg-xeno-secondary text-xeno-primary font-medium'
-                : 'text-gray-600 hover:bg-gray-100'
+                ? "bg-xeno-secondary text-xeno-primary font-medium"
+                : "text-gray-600 hover:bg-gray-100"
             }`
           }
         >
@@ -74,7 +93,7 @@ const Navigation: React.FC = () => {
         <div className="flex items-center">
           <XenoLogo />
         </div>
-        
+
         {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center space-x-6">
           {navLinks.map((link) => (
@@ -84,8 +103,8 @@ const Navigation: React.FC = () => {
               className={({ isActive }) =>
                 `px-3 py-2 rounded-md transition-colors ${
                   isActive
-                    ? 'bg-xeno-secondary text-xeno-primary font-medium'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    ? "bg-xeno-secondary text-xeno-primary font-medium"
+                    : "text-gray-600 hover:bg-gray-100"
                 }`
               }
             >
@@ -93,37 +112,32 @@ const Navigation: React.FC = () => {
             </NavLink>
           ))}
         </div>
-        
+
         {/* Desktop Right Section */}
         <div className="hidden lg:flex items-center gap-6">
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
-            <Input 
-              placeholder="Search..." 
-              className="pl-8 h-9 w-56 bg-gray-50 focus:bg-white" 
+            <Input
+              placeholder="Search..."
+              className="pl-8 h-9 w-56 bg-gray-50 focus:bg-white"
             />
           </div>
 
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm" className="border-gray-200 px-4">
-              Sign In
-            </Button>
-            
-            <Button size="sm" className="bg-xeno-primary hover:bg-xeno-primary/90 flex items-center gap-1 px-4">
-              Request Demo
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-
             <UserMenu />
           </div>
         </div>
-        
+
         {/* Mobile Menu Button */}
         <div className="flex lg:hidden items-center space-x-4">
-          <Button variant="outline" size="sm" className="border-gray-200 h-9 px-2.5 mr-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="border-gray-200 h-9 px-2.5 mr-2"
+          >
             Sign In
           </Button>
-          
+
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="h-9 w-9">
@@ -149,7 +163,9 @@ const Navigation: React.FC = () => {
                   <div className="flex items-center space-x-3 px-3 py-2">
                     <Avatar>
                       <AvatarImage src="/placeholder.svg" alt="User avatar" />
-                      <AvatarFallback className="bg-xeno-primary text-primary-foreground">XC</AvatarFallback>
+                      <AvatarFallback className="bg-xeno-primary text-primary-foreground">
+                        XC
+                      </AvatarFallback>
                     </Avatar>
                     <div>
                       <p className="text-sm font-medium">Xeno User</p>
@@ -171,17 +187,25 @@ const UserMenu = () => (
     <DropdownMenuTrigger className="outline-none">
       <Avatar>
         <AvatarImage src="/placeholder.svg" alt="User avatar" />
-        <AvatarFallback className="bg-xeno-primary text-primary-foreground">XC</AvatarFallback>
+        <AvatarFallback className="bg-xeno-primary text-primary-foreground">
+          XC
+        </AvatarFallback>
       </Avatar>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" className="w-56">
-      <DropdownMenuItem asChild className="cursor-pointer flex items-center gap-2">
+      <DropdownMenuItem
+        asChild
+        className="cursor-pointer flex items-center gap-2"
+      >
         <Link to="/profile">
           <User className="h-4 w-4" />
           <span>Profile</span>
         </Link>
       </DropdownMenuItem>
-      <DropdownMenuItem asChild className="cursor-pointer flex items-center gap-2">
+      <DropdownMenuItem
+        asChild
+        className="cursor-pointer flex items-center gap-2"
+      >
         <Link to="/settings">
           <Settings className="h-4 w-4" />
           <span>Settings</span>
