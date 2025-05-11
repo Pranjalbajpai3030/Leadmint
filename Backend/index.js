@@ -67,9 +67,11 @@ app.get('/', (req, res) => {
 
 app.use('/api/customers', require('./routes/customers'));
 app.use('/api/orders', require('./routes/orders'));
+app.use('/api/auth', require('./routes/auth'));
 app.use('/api/segments', require('./routes/segments'));
 app.use('/api/campaigns', require('./routes/campaign'));
 app.use('/api/receipt', require('./routes/recipent'));
+app.use('/api/stats', require('./routes/stats'));
 
 // CORS & Headers Middleware
 app.use((req, res, next) => {

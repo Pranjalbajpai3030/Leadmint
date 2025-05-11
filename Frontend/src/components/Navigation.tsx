@@ -206,10 +206,7 @@ const UserMenu = () => (
         asChild
         className="cursor-pointer flex items-center gap-2"
       >
-        <Link to="/settings">
-          <Settings className="h-4 w-4" />
-          <span>Settings</span>
-        </Link>
+       
       </DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuItem className="cursor-pointer flex items-center gap-2 text-red-500 focus:text-red-500">

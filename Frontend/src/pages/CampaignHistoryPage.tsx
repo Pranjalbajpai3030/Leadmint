@@ -166,7 +166,7 @@ const CampaignHistoryPage: React.FC = () => {
                     Success Rate
                   </th>
                   <th className="py-3 px-4 font-medium text-center">Status</th>
-                  <th className="py-3 px-4 font-medium text-right">Actions</th>
+                  
                 </tr>
               </thead>
               <tbody className="divide-y">
@@ -203,9 +203,7 @@ const CampaignHistoryPage: React.FC = () => {
                     </td>
                     <td className="py-3 px-4 text-right">
                       <Link to={`/campaign/${campaign.id}/details`}>
-                        <Button variant="ghost" size="sm" className="h-8 px-2">
-                          <Eye className="h-4 w-4 mr-1" /> View Details
-                        </Button>
+                        
                       </Link>
                     </td>
                   </tr>

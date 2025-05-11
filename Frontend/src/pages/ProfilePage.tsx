@@ -156,50 +156,7 @@ const ProfilePage: React.FC = () => {
           </CardContent>
         </Card>
         
-        <Card className="md:col-span-3">
-          <CardHeader>
-            <CardTitle>Notification Preferences</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <table className="w-full">
-              <tbody>
-                <tr className="border-b">
-                  <td className="py-4">
-                    <div className="font-medium">Campaign Completion Alerts</div>
-                    <div className="text-sm text-gray-500">Get notified when your campaigns finish sending</div>
-                  </td>
-                  <td className="py-4 text-right">
-                    <Badge variant={profile?.notificationPreferences.campaignComplete ? "default" : "outline"} className={profile?.notificationPreferences.campaignComplete ? "bg-xeno-primary" : ""}>
-                      {profile?.notificationPreferences.campaignComplete ? 'Enabled' : 'Disabled'}
-                    </Badge>
-                  </td>
-                </tr>
-                <tr className="border-b">
-                  <td className="py-4">
-                    <div className="font-medium">New Customer Signup Alerts</div>
-                    <div className="text-sm text-gray-500">Get notified when new customers join your platform</div>
-                  </td>
-                  <td className="py-4 text-right">
-                    <Badge variant={profile?.notificationPreferences.newCustomerSignups ? "default" : "outline"} className={profile?.notificationPreferences.newCustomerSignups ? "bg-xeno-primary" : ""}>
-                      {profile?.notificationPreferences.newCustomerSignups ? 'Enabled' : 'Disabled'}
-                    </Badge>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-4">
-                    <div className="font-medium">Weekly Performance Reports</div>
-                    <div className="text-sm text-gray-500">Receive weekly summaries of your campaign performance</div>
-                  </td>
-                  <td className="py-4 text-right">
-                    <Badge variant={profile?.notificationPreferences.weeklyReports ? "default" : "outline"} className={profile?.notificationPreferences.weeklyReports ? "bg-xeno-primary" : ""}>
-                      {profile?.notificationPreferences.weeklyReports ? 'Enabled' : 'Disabled'}
-                    </Badge>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </CardContent>
-        </Card>
+        
       </div>
     </div>
   );

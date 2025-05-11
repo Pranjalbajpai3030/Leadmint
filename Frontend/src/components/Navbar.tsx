@@ -12,7 +12,7 @@ import {
   User,
   Menu,
   LayoutDashboard,
-  Settings,
+ 
   Mail,
   LogOut
 } from 'lucide-react';
@@ -30,7 +30,6 @@ const Navbar = () => {
     { name: 'Dashboard', href: '/', icon: LayoutDashboard },
     { name: 'Segments', href: '/segments', icon: Mail },
     { name: 'Campaigns', href: '/campaigns', icon: Mail },
-    { name: 'Settings', href: '/settings', icon: Settings }
   ];
 
   return (
@@ -132,10 +131,6 @@ const Navbar = () => {
                 <DropdownMenuItem className="flex items-center gap-2 cursor-pointer px-3 py-2">
                   <User className="h-4 w-4 text-gray-500" />
                   <span>Profile</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="flex items-center gap-2 cursor-pointer px-3 py-2">
-                  <Settings className="h-4 w-4 text-gray-500" />
-                  <span>Account Settings</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="flex items-center gap-2 cursor-pointer px-3 py-2 text-red-600 hover:bg-red-50">

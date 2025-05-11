@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const genAI = new GoogleGenerativeAI(process.env.GEMINIKEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 // Utility: Convert rule JSON to SQL WHERE clause
 const buildWhereClause = (rules) => {
@@ -93,5 +96,69 @@ router.post('/', async (req, res) => {
         return res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
+router.post("/generate-rule", async (req, res) => {
+    const { user_id, segment_name, prompt } = req.body;
+
+    if (!user_id || !segment_name || !prompt) {
+        return res.status(400).json({ error: "user_id, segment_name, and prompt are required." });
+    }
+
+    const strictPrompt = `
+    Based on the user prompt below, generate ONLY a valid JSON object for a customer segment.
+    The format must be strictly like this:
+
+    {
+      "user_id": ${user_id},
+      "name": "${segment_name}",
+      "rules": {
+        "condition": "AND",
+        "rules": [
+          {
+            "field": "total_spent",
+            "operator": ">",
+            "value": 1000
+          },
+          {
+            "field": "visit_count",
+            "operator": "<",
+            "value": 5
+          }
+        ]
+      }
+    }
+
+    Strict Guidelines:
+    - If the prompt is not clear, return an empty JSON object. 
+    - Output only valid JSON (no markdown, no code blocks, no text).
+    - Only use these fields in rules: "total_spent", "visit_count", "last_active".
+    - Use logical values and comparisons based on the input.
+    - Limit to 2–4 rules inside the "rules" array.
+    - Provide no extra explanation, only JSON.
+
+    User Prompt: "${prompt}"
+    `;
+
+    try {
+        const result = await model.generateContent(strictPrompt);
+        let rawText = await result.response.text();
+
+        // Clean and trim any code formatting
+        rawText = rawText.replace(/```json\n|\n```/g, "").trim();
+
+        try {
+            const parsed = JSON.parse(rawText);
+            res.json(parsed);
+        } catch (parseError) {
+            console.error("JSON Parsing Error:", parseError);
+            res.status(500).json({ error: "Invalid JSON response from model", raw: rawText });
+        }
+    } catch (error) {
+        console.error("Gemini API Error:", error);
+        res.status(500).json({ error: "Failed to generate segment data" });
+    }
+});
+
 
 module.exports = router;

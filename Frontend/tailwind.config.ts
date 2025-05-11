@@ -2,6 +2,17 @@
 import type { Config } from "tailwindcss";
 
 export default {
+  theme: {
+    extend: {
+      colors: {
+        'xeno-primary': '#8B5CF6',
+        'xeno-secondary': '#7C3AED',
+      },
+      backdropBlur: {
+        xs: '2px',
+      }
+    }
+  },
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",

@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const genAI = new GoogleGenerativeAI(process.env.GEMINIKEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 // Utility (same as in segmentRoutes)
 const buildWhereClause = (rules) => {
@@ -69,6 +72,55 @@ router.post('/', async (req, res) => {
         return res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+router.post("/generate-message", async (req, res) => {
+    const { segment_id, prompt } = req.body;
+
+    if (!segment_id || !prompt) {
+        return res.status(400).json({ error: "segment_id and prompt are required" });
+    }
+
+    const systemPrompt = `
+Generate a **short, catchy marketing message** based on this user intent:
+"${prompt}"
+
+🎯 Output Rules:
+- Include relevant emojis to grab attention.
+- Message length: Max 15-20 words.
+- Should feel personalized and customer-friendly.
+- Do NOT add any intro or explanation.
+- Strictly output in this JSON format:
+
+{
+  "segment_id": ${segment_id},
+  "message": "Your generated message here"
+}
+
+🔴 ONLY return JSON. No markdown. No extra comments.
+`;
+
+    try {
+        const result = await model.generateContent(systemPrompt);
+        let aiResponse = result.response.text();
+
+        // Clean up (remove ```json formatting if any)
+        aiResponse = aiResponse.replace(/```json\n?|```/g, "").trim();
+
+        try {
+            const parsed = JSON.parse(aiResponse);
+            res.json(parsed);
+        } catch (err) {
+            console.error("Parsing Error:", err);
+            res.status(500).json({ error: "Invalid AI response", raw: aiResponse });
+        }
+    } catch (error) {
+        console.error("AI Error:", error);
+        res.status(500).json({ error: "Failed to generate message" });
+    }
+});
+
+module.exports = router;
+
 // GET /api/campaigns/history - Get list of past campaigns with stats
 router.get('/history', async (req, res) => {
     try {
