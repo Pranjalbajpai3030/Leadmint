@@ -141,8 +141,9 @@ VITE_BACKEND_URL=http://localhost:5000
 ---
 
  🖼️ Architecture Diagram
+![Flowchart](https://github.com/user-attachments/assets/b6dde545-53aa-429c-8356-0628fd63b74f)
 
-> 📌 *Coming soon – or add `docs/architecture.png` here*
+
 
 ```
 
