@@ -39,7 +39,7 @@ const Navbar = () => {
           {/* Logo Section */}
           <Link to="/" className="flex items-center space-x-2">
             <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
-              XENO CRM
+              Leadmint
             </span>
           </Link>
 
@@ -81,7 +81,7 @@ const Navbar = () => {
                   <div className="flex flex-col h-full py-6">
                     <div className="mb-8 px-4">
                       <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
-                        XENO CRM
+                        Leadmint
                       </span>
                     </div>
                     <nav className="flex-1 flex flex-col gap-1">

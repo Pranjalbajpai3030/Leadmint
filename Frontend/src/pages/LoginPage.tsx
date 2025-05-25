@@ -60,7 +60,7 @@ const LoginPage: React.FC = () => {
             className="text-center mb-8"
           >
             <h1 className="text-3xl font-bold bg-gradient-to-r from-xeno-primary to-xeno-secondary bg-clip-text text-transparent mb-2">
-              Welcome to Xeno CRM
+              Welcome to Leadmint
             </h1>
             <p className="text-gray-600 font-medium">
               Streamline your customer management with AI-powered insights
