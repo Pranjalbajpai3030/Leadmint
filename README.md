@@ -1,7 +1,7 @@
 
- 🚀 Xeno-CRM – AI-Powered Customer Relationship Management Platform
+ 🚀 Leadmint – AI-Powered Customer Relationship Management Platform
 
-Xeno-CRM is a full-stack mini CRM system that empowers marketers and businesses to create dynamic audience segments, deliver personalized campaigns, and intelligently track delivery results using AI enhancements. Built with modern technologies, this system simulates real-world CRM behavior and integrates machine intelligence to make campaign management smarter and faster.
+Leadmint is a full-stack mini CRM system that empowers marketers and businesses to create dynamic audience segments, deliver personalized campaigns, and intelligently track delivery results using AI enhancements. Built with modern technologies, this system simulates real-world CRM behavior and integrates machine intelligence to make campaign management smarter and faster.
 
 ---
 
