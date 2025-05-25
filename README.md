@@ -8,7 +8,7 @@ Xeno-CRM is a full-stack mini CRM system that empowers marketers and businesses 
  🌐 Live Demo
 
 - 🔗 **Frontend**: [Live Website](https://customer-relationship-management-three.vercel.app/login)
-- 🎥 **Demo Video**: [Watch on YouTube](https://your-demo-link)
+- 🎥 **Demo Video**: [Watch on YouTube](https://www.youtube.com/watch?v=O8Z8kK1d1dA)
 
 ---
 
@@ -141,8 +141,9 @@ VITE_BACKEND_URL=http://localhost:5000
 ---
 
  🖼️ Architecture Diagram
+![Flowchart](https://github.com/user-attachments/assets/b6dde545-53aa-429c-8356-0628fd63b74f)
 
-> 📌 *Coming soon – or add `docs/architecture.png` here*
+
 
 ```
 
